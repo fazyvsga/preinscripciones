@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripción Módulo de Nivelación</title>
+    <!-- Bootstrap para diseño rápido y responsive -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <style>
+        .cronograma-header {
+            background-color: #f8f9fa;
+            border-left: 5px solid #0d6efd;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        .modal-recuadro {
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.5); 
+            z-index: 1000;
+            justify-content: center; 
+            align-items: center;
+        }
+        .modal-contenido {
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            max-width: 500px; 
+            width: 90%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5 mb-5" style="max-width: 800px;">
+        
+        <!-- ENCABEZADO CRONOGRAMA -->
+        <div class="cronograma-header shadow-sm">
+            <h4 class="fw-bold text-uppercase text-primary mb-1">Cronograma del Módulo de Nivelación 2026/2027</h4>
+            <h5 class="fw-semibold text-secondary mb-3">Carreras de Ingeniería Agronómica e Ingeniería Zootecnista</h5>
+            <p class="mb-1 fw-bold text-dark">CURSOS DE NIVELACIÓN (Centro Herrera)</p>
+            <p class="mb-2 text-muted fw-bold">NOVIEMBRE 2026</p>
+            <p class="mb-0 bg-warning-subtle d-inline-block p-2 rounded text-warning-focus fw-medium">
+                <strong>Inscripción a los Cursos de Nivelación de NOVIEMBRE:</strong> 01/10/2026 al 30/10/2026
+            </p>
+        </div>
+
+        <!-- FORMULARIO -->
+        <div class="card p-4 shadow-sm">
+            <h3 class="mb-4 text-center text-dark border-bottom pb-2">Formulario de Inscripción</h3>
+            
+            <!-- Zona de Alertas para Duplicados -->
+            <div id="alertaError" class="alert alert-danger d-none" role="alert"></div>
+
+            <form id="formInscripcion">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="dni" class="form-label fw-medium">DNI (Solo números, único)</label>
+                        <input type="text" class="form-control" id="dni" pattern="[0-9]{7,10}" title="Ingresá un DNI válido sin puntos ni espacios" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="apellido" class="form-label fw-medium">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="nombre" class="form-label fw-medium">Nombre Completo</label>
+                    <input type="text" class="form-control" id="nombre" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-medium">Correo Electrónico (Único)</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="telefono" class="form-label fw-medium">Teléfono de Contacto</label>
+                    <input type="tel" class="form-control" id="telefono" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="direccion" class="form-label fw-medium">Dirección</label>
+                    <input type="text" class="form-control" id="direccion" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="provincia" class="form-label fw-medium">Provincia</label>
+                        <input type="text" class="form-control" id="provincia" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="localidad" class="form-label fw-medium">Localidad</label>
+                        <input type="text" class="form-control" id="localidad" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="esc_egreso" class="form-label fw-medium">Escuela de Egreso (Esc_egreso)</label>
+                    <input type="text" class="form-control" id="esc_egreso" required>
+                </div>
+
+                <button type="submit" id="btnEnviar" class="btn btn-primary w-100 py-2 fs-5">Enviar Formulario</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- RECUADRO DE CONFIRMACIÓN (MODAL) -->
+    <div id="modalConfirmacion" class="modal-recuadro">
+        <div class="modal-contenido text-center">
+            <h4 class="text-success fw-bold mb-3">¡Inscripción Guardada con Éxito!</h4>
+            <hr>
+            <div class="text-start mb-4 bg-light p-3 rounded border">
+                <p class="mb-2 text-primary"><strong>N° de Inscripción (ID):</strong> <span id="resId" class="fw-bold"></span></p> 
+                <p class="mb-2"><strong>DNI:</strong> <span id="resDni"></span></p>
+                <p class="mb-2"><strong>Apellido:</strong> <span id="resApellido"></span></p>
+                <p class="mb-2"><strong>Nombre Completo:</strong> <span id="resNombre"></span></p>
+                <p class="mb-0"><strong>Email:</strong> <span id="resEmail"></span></p>
+            </div>
+            <button id="btnOk" class="btn btn-success w-100 py-2 fs-5">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Tu URL de Google Apps Script ya vinculada
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYQkOIXuAFcZ3sbYYi7Vij7Zka4rlyJLcu3__jv_DHavcDRQDavur0m5zSYUNKkwOlEw/exec";
+
+        document.getElementById('formInscripcion').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btnEnviar = document.getElementById('btnEnviar');
+            const alertaError = document.getElementById('alertaError');
+            
+            btnEnviar.disabled = true;
+            btnEnviar.innerText = "Procesando inscripción...";
+            alertaError.classList.add('d-none');
+
+            // Captura de datos
+            const dni = document.getElementById('dni').value;
+            const apellido = document.getElementById('apellido').value;
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+            const direccion = document.getElementById('direccion').value;
+            const provincia = document.getElementById('provincia').value;
+            const localidad = document.getElementById('localidad').value;
+            const esc_egreso = document.getElementById('esc_egreso').value;
+
+            // Envío al Script de Google Sheets
+            const urlData = `${SCRIPT_URL}?dni=${encodeURIComponent(dni)}&apellido=${encodeURIComponent(apellido)}&nombre=${encodeURIComponent(nombre)}&email=${encodeURIComponent(email)}&telefono=${encodeURIComponent(telefono)}&direccion=${encodeURIComponent(direccion)}&provincia=${encodeURIComponent(provincia)}&localidad=${encodeURIComponent(localidad)}&esc_egreso=${encodeURIComponent(esc_egreso)}`;
+
+            fetch(urlData, { method: 'POST' })
+            .then(response => response.json())
+            .then(res => {
+                if (res.status === "success") {
+                    // Cargar datos en el recuadro final
+                    document.getElementById('resId').innerText = res.idInscripcion;
+                    document.getElementById('resDni').innerText = dni;
+                    document.getElementById('resApellido').innerText = apellido;
+                    document.getElementById('resNombre').innerText = nombre;
+                    document.getElementById('resEmail').innerText = email;
+                    
+                    // Mostrar el recuadro
+                    document.getElementById('modalConfirmacion').style.display = 'flex';
+                } else {
+                    // Mostrar error si el DNI o Email ya existen
+                    alertaError.innerText = res.message;
+                    alertaError.classList.remove('d-none');
+                    btnEnviar.disabled = false;
+                    btnEnviar.innerText = "Enviar Formulario";
+                    window.scrollTo(0, 0); // Sube la pantalla para ver el error
+                }
+            })
+            .catch(error => {
+                alertaError.innerText = "Hubo un error de conexión. Asegúrate de haber otorgado los permisos en Apps Script.";
+                alertaError.classList.remove('d-none');
+                btnEnviar.disabled = false;
+                btnEnviar.innerText = "Enviar Formulario";
+            });
+        });
+
+        // Acción del botón OK (Cierra la pestaña)
+        document.getElementById('btnOk').addEventListener('click', function() {
+            window.close();
+            // Resguardo por si las políticas de seguridad del navegador bloquean el cierre directo
+            alert("Inscripción completada con éxito. Ya puedes cerrar esta pestaña.");
+        });
+    </script>
+</body>
+</html>
