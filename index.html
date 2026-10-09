@@ -1,20 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscripción Módulo de Nivelación</title>
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
         .cronograma-header {
             background-color: #f8f9fa;
             border-left: 5px solid #0d6efd;
@@ -22,625 +13,221 @@
             margin-bottom: 30px;
             border-radius: 4px;
         }
-
         .modal-recuadro {
             display: none;
             position: fixed;
             inset: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             overflow-y: auto;
             padding: 20px;
         }
-
         .modal-contenido {
             background: white;
             padding: 30px;
             border-radius: 8px;
             max-width: 500px;
             width: 100%;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .campo-obligatorio {
-            color: #dc3545;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
     </style>
 </head>
-
-<body>
-
-<div class="container mt-5 mb-5" style="max-width: 800px;">
-
-    <!-- ENCABEZADO -->
-    <div class="cronograma-header shadow-sm">
-        <h4 class="fw-bold text-uppercase text-primary mb-1">
-            Cronograma del Módulo de Nivelación 2026/2027
-        </h4>
-
-        <h5 class="fw-semibold text-secondary mb-3">
-            Carreras de Ingeniería Agronómica e Ingeniería Zootecnista
-        </h5>
-
-        <p class="mb-1 fw-bold text-dark">
-            CURSOS DE NIVELACIÓN (Centro Herrera)
-        </p>
-
-        <p class="mb-2 text-muted fw-bold">
-            NOVIEMBRE 2026
-        </p>
-
-        <p class="mb-0 bg-warning-subtle d-inline-block p-2 rounded fw-medium">
-            <strong>Inscripción a los Cursos de Nivelación de NOVIEMBRE:</strong>
-            01/10/2026 al 30/10/2026
-        </p>
-    </div>
-
-    <!-- FORMULARIO -->
-    <div class="card p-4 shadow-sm">
-
-        <h3 class="mb-4 text-center text-dark border-bottom pb-2">
-            Formulario de Inscripción
-        </h3>
-
-        <div id="alertaError"
-             class="alert alert-danger d-none"
-             role="alert"
-             aria-live="polite">
+<body class="bg-light">
+    <div class="container mt-5 mb-5" style="max-width: 800px;">
+        <div class="cronograma-header shadow-sm">
+            <h4 class="fw-bold text-uppercase text-primary mb-1">Cronograma del Módulo de Nivelación 2026/2027</h4>
+            <h5 class="fw-semibold text-secondary mb-3">Carreras de Ingeniería Agronómica e Ingeniería Zootecnista</h5>
+            <p class="mb-1 fw-bold text-dark">CURSOS DE NIVELACIÓN (Centro Herrera)</p>
+            <p class="mb-2 text-muted fw-bold">NOVIEMBRE 2026</p>
+            <p class="mb-0 bg-warning-subtle d-inline-block p-2 rounded text-warning-emphasis fw-medium">
+                <strong>Inscripción a los Cursos de Nivelación de NOVIEMBRE:</strong> 01/10/2026 al 30/10/2026
+            </p>
         </div>
 
-        <form id="formInscripcion">
+        <div class="card p-4 shadow-sm">
+            <h3 class="mb-4 text-center text-dark border-bottom pb-2">Formulario de Inscripción</h3>
+            <div id="alertaError" class="alert alert-danger d-none" role="alert" aria-live="polite"></div>
 
-            <!-- DNI Y APELLIDO -->
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
-                    <label for="dni" class="form-label fw-medium">
-                        DNI (solo números, único)
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           id="dni"
-                           name="dni"
-                           inputmode="numeric"
-                           pattern="[0-9]{7,10}"
-                           maxlength="10"
-                           title="Ingresá un DNI válido sin puntos ni espacios"
-                           required>
+            <form id="formInscripcion">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="dni" class="form-label fw-medium">DNI (solo números, único)</label>
+                        <input type="text" class="form-control" id="dni" pattern="[0-9]{7,10}" title="Ingresá un DNI válido sin puntos ni espacios" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="apellido" class="form-label fw-medium">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" required>
+                    </div>
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <label for="apellido" class="form-label fw-medium">
-                        Apellido
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           id="apellido"
-                           name="apellido"
-                           maxlength="40"
-                           required>
+                <div class="mb-3">
+                    <label for="nombre" class="form-label fw-medium">Nombre completo</label>
+                    <input type="text" class="form-control" id="nombre" required>
                 </div>
 
-            </div>
-
-            <!-- NOMBRE -->
-            <div class="mb-3">
-                <label for="nombre" class="form-label fw-medium">
-                    Nombre completo
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       id="nombre"
-                       name="nombre"
-                       maxlength="40"
-                       required>
-            </div>
-
-            <!-- EMAIL -->
-            <div class="mb-3">
-                <label for="email" class="form-label fw-medium">
-                    Correo electrónico (único)
-                </label>
-
-                <input type="email"
-                       class="form-control"
-                       id="email"
-                       name="email"
-                       required>
-            </div>
-
-            <!-- TELEFONO -->
-            <div class="mb-3">
-                <label for="telefono" class="form-label fw-medium">
-                    Teléfono de contacto
-                </label>
-
-                <input type="tel"
-                       class="form-control"
-                       id="telefono"
-                       name="telefono"
-                       inputmode="numeric"
-                       pattern="[0-9]{8,15}"
-                       maxlength="15"
-                       title="Ingresá entre 8 y 15 números, sin espacios ni guiones"
-                       required>
-            </div>
-
-            <!-- DIRECCION -->
-            <div class="mb-3">
-                <label for="direccion" class="form-label fw-medium">
-                    Dirección
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       id="direccion"
-                       name="direccion"
-                       required>
-            </div>
-
-            <!-- PROVINCIA Y LOCALIDAD -->
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
-                    <label for="provincia" class="form-label fw-medium">
-                        Provincia
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           id="provincia"
-                           name="provincia"
-                           required>
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-medium">Correo electrónico (único)</label>
+                    <input type="email" class="form-control" id="email" required>
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <label for="localidad" class="form-label fw-medium">
-                        Localidad
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           id="localidad"
-                           name="localidad"
-                           required>
+                <div class="mb-3">
+                    <label for="telefono" class="form-label fw-medium">Teléfono de contacto</label>
+                    <input type="tel" class="form-control" id="telefono" pattern="[0-9]{8,15}" title="Ingresá entre 8 y 15 números, sin espacios ni guiones" required>
                 </div>
 
-            </div>
-
-            <!-- ESCUELA -->
-            <div class="mb-3">
-                <label for="esc_egreso" class="form-label fw-medium">
-                    Escuela de egreso
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       id="esc_egreso"
-                       name="esc_egreso"
-                       required>
-            </div>
-
-            <!-- TURNO -->
-            <div class="mb-4">
-                <label for="turno" class="form-label fw-medium">
-                    Turno de cursado
-                    <span class="campo-obligatorio">*</span>
-                </label>
-
-                <select class="form-select"
-                        id="turno"
-                        name="turno"
-                        required>
-
-                    <option value="" selected disabled>
-                        Seleccioná un turno
-                    </option>
-
-                    <option value="Mañana">Mañana</option>
-                    <option value="Tarde">Tarde</option>
-
-                </select>
-
-                <div class="form-text">
-                    Debés seleccionar el turno en el que vas a cursar.
+                <div class="mb-3">
+                    <label for="direccion" class="form-label fw-medium">Dirección</label>
+                    <input type="text" class="form-control" id="direccion" required>
                 </div>
-            </div>
 
-            <!-- COMPROBANTE -->
-            <div class="mb-4">
-                <label for="comprobante" class="form-label fw-medium">
-                    Comprobante de pago
-                    <span class="campo-obligatorio">*</span>
-                </label>
-
-                <input type="file"
-                       class="form-control"
-                       id="comprobante"
-                       name="comprobante"
-                       accept=".jpg,.jpeg,.png,image/jpeg,image/png"
-                       required>
-
-                <div class="form-text">
-                    Adjuntá una imagen JPG, JPEG o PNG de hasta 5 MB.
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="provincia" class="form-label fw-medium">Provincia</label>
+                        <input type="text" class="form-control" id="provincia" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="localidad" class="form-label fw-medium">Localidad</label>
+                        <input type="text" class="form-control" id="localidad" required>
+                    </div>
                 </div>
-            </div>
 
-            <!-- ENVIO -->
-            <button type="submit"
-                    id="btnEnviar"
-                    class="btn btn-primary w-100 py-2 fs-5">
-                Enviar formulario
-            </button>
+                <div class="mb-3">
+                    <label for="esc_egreso" class="form-label fw-medium">Escuela de egreso</label>
+                    <input type="text" class="form-control" id="esc_egreso" required>
+                </div>
 
-        </form>
-    </div>
-</div>
+                <div class="mb-3">
+                    <label for="turno" class="form-label fw-medium">Turno en el que desea cursar</label>
+                    <select class="form-select" id="turno" required>
+                        <option value="">Seleccioná un turno</option>
+                        <option value="Mañana">Turno mañana</option>
+                        <option value="Tarde">Turno tarde</option>
+                    </select>
+                </div>
 
-<!-- MODAL DE CONFIRMACION -->
-<div id="modalConfirmacion"
-     class="modal-recuadro"
-     role="dialog"
-     aria-modal="true"
-     aria-labelledby="tituloConfirmacion">
+                <div class="mb-4">
+                    <label for="comprobante" class="form-label fw-medium">Comprobante de pago (JPG o PNG)</label>
+                    <input type="file" class="form-control" id="comprobante" accept="image/jpeg,image/png,.jpg,.jpeg,.png" required>
+                    <div class="form-text">Adjuntá una imagen JPG o PNG. Tamaño máximo recomendado: 5 MB.</div>
+                </div>
 
-    <div class="modal-contenido text-center">
-
-        <h4 id="tituloConfirmacion"
-            class="text-success fw-bold mb-3">
-            ¡Inscripción guardada con éxito!
-        </h4>
-
-        <hr>
-
-        <div class="text-start mb-4 bg-light p-3 rounded border">
-
-            <p class="mb-2 text-primary">
-                <strong>N.º de inscripción:</strong>
-                <span id="resId"></span>
-            </p>
-
-            <p class="mb-2">
-                <strong>DNI:</strong>
-                <span id="resDni"></span>
-            </p>
-
-            <p class="mb-2">
-                <strong>Apellido:</strong>
-                <span id="resApellido"></span>
-            </p>
-
-            <p class="mb-2">
-                <strong>Nombre:</strong>
-                <span id="resNombre"></span>
-            </p>
-
-            <p class="mb-2">
-                <strong>Email:</strong>
-                <span id="resEmail"></span>
-            </p>
-
-            <p class="mb-2">
-                <strong>Turno:</strong>
-                <span id="resTurno"></span>
-            </p>
-
-            <p class="mb-0">
-                <strong>Comprobante:</strong>
-                <a id="resComprobante"
-                   href="#"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    Ver comprobante
-                </a>
-            </p>
-
+                <button type="submit" id="btnEnviar" class="btn btn-primary w-100 py-2 fs-5">Enviar formulario</button>
+            </form>
         </div>
-
-        <button type="button"
-                id="btnOk"
-                class="btn btn-success w-100 py-2 fs-5">
-            Finalizar
-        </button>
-
     </div>
-</div>
 
-<script>
-    // ========================================================
-    // URL DE GOOGLE APPS SCRIPT
-    // ========================================================
+    <div id="modalConfirmacion" class="modal-recuadro" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmacion">
+        <div class="modal-contenido text-center">
+            <h4 id="tituloConfirmacion" class="text-success fw-bold mb-3">¡Inscripción guardada con éxito!</h4>
+            <hr>
+            <div class="text-start mb-4 bg-light p-3 rounded border">
+                <p class="mb-2 text-primary"><strong>N.º de inscripción (ID):</strong> <span id="resId" class="fw-bold"></span></p>
+                <p class="mb-2"><strong>DNI:</strong> <span id="resDni"></span></p>
+                <p class="mb-2"><strong>Apellido:</strong> <span id="resApellido"></span></p>
+                <p class="mb-2"><strong>Nombre completo:</strong> <span id="resNombre"></span></p>
+                <p class="mb-2"><strong>Email:</strong> <span id="resEmail"></span></p>
+                <p class="mb-0"><strong>Turno:</strong> <span id="resTurno"></span></p>
+            </div>
+            <button type="button" id="btnOk" class="btn btn-success w-100 py-2 fs-5">Aceptar</button>
+        </div>
+    </div>
 
-    const SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbzYQkOIXuAFcZ3sbYYi7Vij7Zka4rlyJLcu3__jv_DHavcDRQDavur0m5zSYUNKkwOlEw/exec";
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4NJJvdhWyopGFcrbrvSHYgtP7Hlm8waSgCIxkcYrOdKaBuQC6OcAJbuBD4-72vwE2Ag/exec";
+        const form = document.getElementById("formInscripcion");
+        const btnEnviar = document.getElementById("btnEnviar");
+        const alertaError = document.getElementById("alertaError");
 
-
-    // ========================================================
-    // ELEMENTOS
-    // ========================================================
-
-    const formulario = document.getElementById("formInscripcion");
-    const btnEnviar = document.getElementById("btnEnviar");
-    const alertaError = document.getElementById("alertaError");
-    const campoComprobante = document.getElementById("comprobante");
-
-    const TAMANO_MAXIMO = 5 * 1024 * 1024;
-
-    const TIPOS_PERMITIDOS = [
-        "image/jpeg",
-        "image/png"
-    ];
-
-
-    // ========================================================
-    // LEER ARCHIVO Y CONVERTIR A BASE64
-    // ========================================================
-
-    function leerArchivoBase64(archivo) {
-
-        return new Promise((resolve, reject) => {
-
-            const lector = new FileReader();
-
-            lector.onload = function () {
-
-                const resultado = String(lector.result || "");
-                const separador = resultado.indexOf(",");
-
-                if (separador === -1) {
-                    reject(new Error(
-                        "No se pudo leer el comprobante."
-                    ));
-                    return;
-                }
-
-                resolve(resultado.substring(separador + 1));
-            };
-
-            lector.onerror = function () {
-                reject(new Error(
-                    "Ocurrió un error al leer el comprobante."
-                ));
-            };
-
-            lector.readAsDataURL(archivo);
-        });
-    }
-
-
-    // ========================================================
-    // MOSTRAR ERROR
-    // ========================================================
-
-    function mostrarError(mensaje) {
-
-        alertaError.textContent = mensaje;
-        alertaError.classList.remove("d-none");
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    }
-
-
-    // ========================================================
-    // RESTABLECER BOTON
-    // ========================================================
-
-    function restablecerBoton() {
-
-        btnEnviar.disabled = false;
-        btnEnviar.textContent = "Enviar formulario";
-    }
-
-
-    // ========================================================
-    // VALIDAR Y ENVIAR FORMULARIO
-    // ========================================================
-
-    formulario.addEventListener("submit", async function (e) {
-
-        e.preventDefault();
-
-        alertaError.classList.add("d-none");
-
-        // Verificación de campos obligatorios.
-        if (!formulario.checkValidity()) {
-            formulario.reportValidity();
-            return;
+        function mostrarError(mensaje) {
+            alertaError.textContent = mensaje;
+            alertaError.classList.remove("d-none");
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
-        const archivo = campoComprobante.files[0];
-
-        if (!archivo) {
-            mostrarError(
-                "Debés adjuntar el comprobante de pago."
-            );
-            return;
-        }
-
-        if (TIPOS_PERMITIDOS.indexOf(archivo.type) === -1) {
-            mostrarError(
-                "El comprobante debe ser una imagen JPG, JPEG o PNG."
-            );
-            return;
-        }
-
-        if (archivo.size > TAMANO_MAXIMO) {
-            mostrarError(
-                "El comprobante supera el tamaño máximo de 5 MB."
-            );
-            return;
-        }
-
-        btnEnviar.disabled = true;
-        btnEnviar.textContent = "Procesando inscripción...";
-
-        try {
-
-            // Capturar datos.
-            const dni =
-                document.getElementById("dni").value.trim();
-
-            const apellido =
-                document.getElementById("apellido").value.trim();
-
-            const nombre =
-                document.getElementById("nombre").value.trim();
-
-            const email =
-                document.getElementById("email").value.trim();
-
-            const telefono =
-                document.getElementById("telefono").value.trim();
-
-            const direccion =
-                document.getElementById("direccion").value.trim();
-
-            const provincia =
-                document.getElementById("provincia").value.trim();
-
-            const localidad =
-                document.getElementById("localidad").value.trim();
-
-            const esc_egreso =
-                document.getElementById("esc_egreso").value.trim();
-
-            const turno =
-                document.getElementById("turno").value;
-
-            // Leer el comprobante.
-            const comprobanteBase64 =
-                await leerArchivoBase64(archivo);
-
-            // Preparar los datos para Apps Script.
-            // URLSearchParams permite enviarlos como parámetros
-            // de formulario, incluidos los datos del comprobante.
-            const parametros = new URLSearchParams();
-
-            parametros.append("dni", dni);
-            parametros.append("apellido", apellido);
-            parametros.append("nombre", nombre);
-            parametros.append("email", email);
-            parametros.append("telefono", telefono);
-            parametros.append("direccion", direccion);
-            parametros.append("provincia", provincia);
-            parametros.append("localidad", localidad);
-            parametros.append("esc_egreso", esc_egreso);
-            parametros.append("turno", turno);
-
-            parametros.append(
-                "comprobanteBase64",
-                comprobanteBase64
-            );
-
-            parametros.append(
-                "comprobanteNombre",
-                archivo.name
-            );
-
-            parametros.append(
-                "comprobanteTipo",
-                archivo.type
-            );
-
-            // Enviar al Apps Script.
-            const response = await fetch(SCRIPT_URL, {
-                method: "POST",
-                body: parametros
+        function archivoABase64(archivo) {
+            return new Promise((resolve, reject) => {
+                const lector = new FileReader();
+                lector.onload = () => {
+                    const resultado = String(lector.result || "");
+                    resolve(resultado.substring(resultado.indexOf(",") + 1));
+                };
+                lector.onerror = () => reject(new Error("No se pudo leer el comprobante."));
+                lector.readAsDataURL(archivo);
             });
+        }
 
-            if (!response.ok) {
-                throw new Error(
-                    "El servidor respondió con un error HTTP " +
-                    response.status + "."
-                );
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            alertaError.classList.add("d-none");
+
+            const archivo = document.getElementById("comprobante").files[0];
+            if (!archivo) {
+                mostrarError("Debés adjuntar el comprobante de pago.");
+                return;
             }
-
-            const res = await response.json();
-
-            if (res.status !== "success") {
-
-                mostrarError(
-                    res.message ||
-                    "No se pudo completar la inscripción."
-                );
-
-                restablecerBoton();
+            if (!["image/jpeg", "image/png"].includes(archivo.type)) {
+                mostrarError("El comprobante debe ser una imagen JPG o PNG.");
+                return;
+            }
+            if (archivo.size > 5 * 1024 * 1024) {
+                mostrarError("El comprobante supera los 5 MB. Elegí una imagen más pequeña.");
                 return;
             }
 
-            // Mostrar los datos de confirmación.
-            document.getElementById("resId").textContent =
-                res.idInscripcion;
+            btnEnviar.disabled = true;
+            btnEnviar.textContent = "Procesando inscripción...";
 
-            document.getElementById("resDni").textContent =
-                dni;
+            try {
+                const datos = {
+                    dni: document.getElementById("dni").value.trim(),
+                    apellido: document.getElementById("apellido").value.trim(),
+                    nombre: document.getElementById("nombre").value.trim(),
+                    email: document.getElementById("email").value.trim(),
+                    telefono: document.getElementById("telefono").value.trim(),
+                    direccion: document.getElementById("direccion").value.trim(),
+                    provincia: document.getElementById("provincia").value.trim(),
+                    localidad: document.getElementById("localidad").value.trim(),
+                    esc_egreso: document.getElementById("esc_egreso").value.trim(),
+                    turno: document.getElementById("turno").value,
+                    comprobanteBase64: await archivoABase64(archivo),
+                    comprobanteNombre: archivo.name,
+                    comprobanteTipo: archivo.type
+                };
 
-            document.getElementById("resApellido").textContent =
-                apellido;
+                const cuerpo = new URLSearchParams(datos);
+                const response = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    body: cuerpo
+                });
+                const res = await response.json();
 
-            document.getElementById("resNombre").textContent =
-                nombre;
+                if (res.status !== "success") {
+                    throw new Error(res.message || "No se pudo completar la inscripción.");
+                }
 
-            document.getElementById("resEmail").textContent =
-                email;
+                document.getElementById("resId").textContent = res.idInscripcion;const SCRIPT_URL
+                document.getElementById("resDni").textContent = datos.dni;
+                document.getElementById("resApellido").textContent = datos.apellido;
+                document.getElementById("resNombre").textContent = datos.nombre;
+                document.getElementById("resEmail").textContent = datos.email;
+                document.getElementById("resTurno").textContent = datos.turno;
+                document.getElementById("modalConfirmacion").style.display = "flex";
+            } catch (error) {
+                mostrarError(error.message || "Hubo un error de conexión. Verificá el despliegue y los permisos de Apps Script.");
+            } finally {
+                btnEnviar.disabled = false;
+                btnEnviar.textContent = "Enviar formulario";
+            }
+        });
 
-            document.getElementById("resTurno").textContent =
-                turno;
-
-            const enlaceComprobante =
-                document.getElementById("resComprobante");
-
-            enlaceComprobante.href = res.comprobante;
-            enlaceComprobante.textContent = "Ver comprobante";
-
-            document.getElementById(
-                "modalConfirmacion"
-            ).style.display = "flex";
-
-        } catch (error) {
-
-            console.error("Error de inscripción:", error);
-
-            mostrarError(
-                "No se pudo confirmar la respuesta del servidor. " +
-                "Antes de volver a enviar, verificá la planilla " +
-                "para comprobar que la inscripción no se haya guardado. " +
-                "Si el problema continúa, revisá la implementación " +
-                "de Apps Script y los permisos."
-            );
-
-            restablecerBoton();
-        }
-    });
-
-
-    // ========================================================
-    // CERRAR CONFIRMACION
-    // ========================================================
-
-    document.getElementById("btnOk").addEventListener(
-        "click",
-        function () {
-
-            document.getElementById(
-                "modalConfirmacion"
-            ).style.display = "none";
-
-            // No cerrar automáticamente la pestaña:
-            // puede haber sido abierta por el usuario.
-        }
-    );
-</script>
-
+        document.getElementById("btnOk").addEventListener("click", function() {
+            document.getElementById("modalConfirmacion").style.display = "none";
+            form.reset();
+        });
+    </script>
 </body>
 </html>
