@@ -1,233 +1,2809 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscripción Módulo de Nivelación</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .cronograma-header {
-            background-color: #f8f9fa;
-            border-left: 5px solid #0d6efd;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 4px;
-        }
-        .modal-recuadro {
-            display: none;
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        .modal-contenido {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-    </style>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Inscripción de Alumnos</title>
+
+<style>
+
+:root {
+
+    --primary: #22c55e;
+    --primary-hover: #16a34a;
+    --success: #16a34a;
+    --error: #dc2626;
+    --background: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border: #cbd5e1;
+    --header-bg: #0284c7;
+    --header-text: #ffffff;
+    --input-bg: #f1f5f9;
+
+}
+
+
+* {
+
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    font-family:
+        'Segoe UI',
+        system-ui,
+        -apple-system,
+        sans-serif;
+
+}
+
+
+body {
+
+    background-color:
+        var(--background);
+
+    color:
+        var(--text-main);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 100vh;
+
+    padding: 20px;
+
+}
+
+
+.container {
+
+    background:
+        var(--card-bg);
+
+    width: 100%;
+
+    max-width: 550px;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 25px -5px
+        rgba(0, 0, 0, 0.05);
+
+    overflow: hidden;
+
+    margin: 20px 0;
+
+}
+
+
+.header {
+
+    background-color:
+        var(--header-bg);
+
+    text-align: center;
+
+    padding: 30px 20px;
+
+    border-bottom:
+        2px solid #0369a1;
+
+}
+
+
+.header h2 {
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+    color:
+        var(--header-text);
+
+    margin-bottom: 8px;
+
+}
+
+
+.header p {
+
+    font-size: 14px;
+
+    color:
+        var(--header-text);
+
+    opacity: 0.9;
+
+}
+
+
+.form-content {
+
+    padding: 30px;
+
+}
+
+
+.form-row {
+
+    display: flex;
+
+    gap: 15px;
+
+}
+
+
+.form-row .form-group {
+
+    flex: 1;
+
+}
+
+
+.form-group {
+
+    margin-bottom: 20px;
+
+    position: relative;
+
+}
+
+
+label {
+
+    display: block;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 6px;
+
+    color: #334155;
+
+}
+
+
+input, select {
+
+    width: 100%;
+
+    padding: 12px 16px;
+
+    font-size: 15px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 8px;
+
+    background-color:
+        var(--input-bg);
+
+    color:
+        var(--text-main);
+
+    transition:
+        all 0.2s ease;
+
+    outline: none;
+
+}
+
+
+input:focus, select:focus {
+
+    border-color: #0284c7;
+
+    background-color: #ffffff;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(2, 132, 199, 0.15);
+
+}
+
+
+.form-group.valido input, .form-group.valido select {
+
+    border-color:
+        var(--success);
+
+}
+
+
+.form-group.invalido input, .form-group.invalido select {
+
+    border-color:
+        var(--error);
+
+}
+
+
+.error-message {
+
+    font-size: 12px;
+
+    color:
+        var(--error);
+
+    margin-top: 5px;
+
+    display: none;
+
+    font-weight: 500;
+
+}
+
+
+.form-group.invalido
+.error-message {
+
+    display: block;
+
+}
+
+
+/* ============================================================
+   COMPROBANTE
+============================================================ */
+
+.comprobante-box {
+
+    border:
+        2px dashed #cbd5e1;
+
+    border-radius: 10px;
+
+    padding: 18px;
+
+    background:
+        #f8fafc;
+
+    transition:
+        all 0.2s ease;
+
+}
+
+
+.comprobante-box:hover {
+
+    border-color:
+        #0284c7;
+
+    background:
+        #f0f9ff;
+
+}
+
+
+.comprobante-box.valido {
+
+    border-color:
+        var(--success);
+
+    background:
+        #f0fdf4;
+
+}
+
+
+.comprobante-box.invalido {
+
+    border-color:
+        var(--error);
+
+    background:
+        #fef2f2;
+
+}
+
+
+.comprobante-input {
+
+    background:
+        #ffffff;
+
+    cursor: pointer;
+
+}
+
+
+.comprobante-info {
+
+    margin-top: 8px;
+
+    font-size: 12px;
+
+    color:
+        var(--text-muted);
+
+}
+
+
+#previewContainer {
+
+    display: none;
+
+    margin-top: 15px;
+
+    text-align: center;
+
+}
+
+
+#previewImagen {
+
+    max-width: 100%;
+
+    max-height: 250px;
+
+    border-radius: 8px;
+
+    border:
+        1px solid #cbd5e1;
+
+    object-fit: contain;
+
+}
+
+
+#nombreArchivo {
+
+    margin-top: 8px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color:
+        #334155;
+
+    word-break: break-word;
+
+}
+
+
+button {
+
+    width: 100%;
+
+    padding: 15px;
+
+    background-color:
+        var(--primary);
+
+    color:
+        white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.5px;
+
+    cursor: pointer;
+
+    transition:
+        all 0.2s ease;
+
+    margin-top: 10px;
+
+    box-shadow:
+        0 4px 6px -1px
+        rgba(34, 197, 94, 0.2);
+
+}
+
+
+button:hover {
+
+    background-color:
+        var(--primary-hover);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+button:disabled {
+
+    background-color:
+        #94a3b8;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+
+}
+
+
+#statusText {
+
+    margin-top: 16px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    line-height: 1.5;
+
+}
+
+
+.success-message {
+
+    background:
+        #dcfce7;
+
+    color:
+        #166534;
+
+    border:
+        1px solid #86efac;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+}
+
+
+.error-general {
+
+    background:
+        #fee2e2;
+
+    color:
+        #991b1b;
+
+    border:
+        1px solid #fca5a5;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+}
+
+
+/* ============================================================
+   PANTALLA DE CONFIRMACIÓN
+============================================================ */
+
+#pantallaConfirmacion {
+
+    display: none;
+
+    width: 100%;
+
+    max-width: 550px;
+
+    background:
+        var(--card-bg);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 25px -5px
+        rgba(0, 0, 0, 0.08);
+
+    overflow: hidden;
+
+}
+
+
+.confirmacion-header {
+
+    background:
+        var(--header-bg);
+
+    text-align: center;
+
+    padding: 35px 20px;
+
+    color: white;
+
+}
+
+
+.confirmacion-icono {
+
+    width: 75px;
+
+    height: 75px;
+
+    margin:
+        0 auto 15px auto;
+
+    border-radius: 50%;
+
+    background:
+        #22c55e;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 42px;
+
+    font-weight: bold;
+
+}
+
+
+.confirmacion-header h2 {
+
+    font-size: 25px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.confirmacion-header p {
+
+    font-size: 14px;
+
+    opacity: 0.95;
+
+}
+
+
+.confirmacion-content {
+
+    padding: 35px 30px;
+
+    text-align: center;
+
+}
+
+
+.confirmacion-content h3 {
+
+    color:
+        var(--success);
+
+    font-size: 21px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.confirmacion-content p {
+
+    color:
+        var(--text-muted);
+
+    line-height: 1.6;
+
+    margin-bottom: 12px;
+
+}
+
+
+.numero-inscripcion {
+
+    background:
+        #f0f9ff;
+
+    border:
+        1px solid #bae6fd;
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    margin:
+        20px 0;
+
+}
+
+
+.numero-inscripcion span {
+
+    display: block;
+
+    font-size: 13px;
+
+    color:
+        var(--text-muted);
+
+    margin-bottom: 5px;
+
+}
+
+
+.numero-inscripcion strong {
+
+    display: block;
+
+    color:
+        #0284c7;
+
+    font-size: 28px;
+
+}
+
+
+#btnFinalizar {
+
+    background:
+        var(--primary);
+
+}
+
+
+#btnFinalizar:hover {
+
+    background:
+        var(--primary-hover);
+
+}
+
+
+@media (max-width: 600px) {
+
+    .form-row {
+
+        flex-direction:
+            column;
+
+        gap: 0;
+
+    }
+
+
+    .form-content {
+
+        padding: 20px;
+
+    }
+
+
+    .header {
+
+        padding: 25px 15px;
+
+    }
+
+
+    .confirmacion-content {
+
+        padding: 30px 20px;
+
+    }
+
+}
+
+    .aviso-transferencia {background:#fff7ed;border:2px solid #ea580c;border-radius:10px;padding:16px;margin-bottom:20px;color:#7c2d12;line-height:1.55;font-size:14px}
+    .aviso-transferencia strong {font-weight:800}
+    .aviso-transferencia p {margin-top:8px}
+    .aviso-imagen {margin-top:12px;background:#fff7ed;padding:10px;border-left:4px solid #ea580c;color:#7c2d12;line-height:1.5}
+    .nota-monto {font-size:13px;line-height:1.5;color:#475569;margin:-5px 0 22px}
+</style>
+
 </head>
-<body class="bg-light">
-    <div class="container mt-5 mb-5" style="max-width: 800px;">
-        <div class="cronograma-header shadow-sm">
-            <h4 class="fw-bold text-uppercase text-primary mb-1">Cronograma del Módulo de Nivelación 2026/2027</h4>
-            <h5 class="fw-semibold text-secondary mb-3">Carreras de Ingeniería Agronómica e Ingeniería Zootecnista</h5>
-            <p class="mb-1 fw-bold text-dark">CURSOS DE NIVELACIÓN (Centro Herrera)</p>
-            <p class="mb-2 text-muted fw-bold">NOVIEMBRE 2026</p>
-            <p class="mb-0 bg-warning-subtle d-inline-block p-2 rounded text-warning-emphasis fw-medium">
-                <strong>Inscripción a los Cursos de Nivelación de NOVIEMBRE:</strong> 01/10/2026 al 30/10/2026
-            </p>
-        </div>
 
-        <div class="card p-4 shadow-sm">
-            <h3 class="mb-4 text-center text-dark border-bottom pb-2">Formulario de Inscripción</h3>
-            <div id="alertaError" class="alert alert-danger d-none" role="alert" aria-live="polite"></div>
 
-            <form id="formInscripcion">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="dni" class="form-label fw-medium">DNI (solo números, único)</label>
-                        <input type="text" class="form-control" id="dni" pattern="[0-9]{7,10}" title="Ingresá un DNI válido sin puntos ni espacios" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="apellido" class="form-label fw-medium">Apellido</label>
-                        <input type="text" class="form-control" id="apellido" required>
-                    </div>
-                </div>
+<body>
 
-                <div class="mb-3">
-                    <label for="nombre" class="form-label fw-medium">Nombre completo</label>
-                    <input type="text" class="form-control" id="nombre" required>
-                </div>
 
-                <div class="mb-3">
-                    <label for="email" class="form-label fw-medium">Correo electrónico (único)</label>
-                    <input type="email" class="form-control" id="email" required>
-                </div>
+<!-- =========================================================
+     FORMULARIO
+========================================================== -->
 
-                <div class="mb-3">
-                    <label for="telefono" class="form-label fw-medium">Teléfono de contacto</label>
-                    <input type="tel" class="form-control" id="telefono" pattern="[0-9]{8,15}" title="Ingresá entre 8 y 15 números, sin espacios ni guiones" required>
-                </div>
+<div
+    class="container"
+    id="formularioContainer"
+>
 
-                <div class="mb-3">
-                    <label for="direccion" class="form-label fw-medium">Dirección</label>
-                    <input type="text" class="form-control" id="direccion" required>
-                </div>
+    <div class="header">
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="provincia" class="form-label fw-medium">Provincia</label>
-                        <input type="text" class="form-control" id="provincia" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="localidad" class="form-label fw-medium">Localidad</label>
-                        <input type="text" class="form-control" id="localidad" required>
-                    </div>
-                </div>
+        <h2>
+            Formulario de Inscripción
+        </h2>
 
-                <div class="mb-3">
-                    <label for="esc_egreso" class="form-label fw-medium">Escuela de egreso</label>
-                    <input type="text" class="form-control" id="esc_egreso" required>
-                </div>
+        <p>
+            Por favor, completa todos tus datos obligatorios
+        </p>
 
-                <div class="mb-3">
-                    <label for="turno" class="form-label fw-medium">Turno en el que desea cursar</label>
-                    <select class="form-select" id="turno" required>
-                        <option value="">Seleccioná un turno</option>
-                        <option value="Mañana">Turno mañana</option>
-                        <option value="Tarde">Turno tarde</option>
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label for="comprobante" class="form-label fw-medium">Comprobante de pago (JPG o PNG)</label>
-                    <input type="file" class="form-control" id="comprobante" accept="image/jpeg,image/png,.jpg,.jpeg,.png" required>
-                    <div class="form-text">Adjuntá una imagen JPG o PNG. Tamaño máximo recomendado: 5 MB.</div>
-                </div>
-
-                <button type="submit" id="btnEnviar" class="btn btn-primary w-100 py-2 fs-5">Enviar formulario</button>
-            </form>
-        </div>
     </div>
 
-    <div id="modalConfirmacion" class="modal-recuadro" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmacion">
-        <div class="modal-contenido text-center">
-            <h4 id="tituloConfirmacion" class="text-success fw-bold mb-3">¡Inscripción guardada con éxito!</h4>
-            <hr>
-            <div class="text-start mb-4 bg-light p-3 rounded border">
-                <p class="mb-2 text-primary"><strong>N.º de inscripción (ID):</strong> <span id="resId" class="fw-bold"></span></p>
-                <p class="mb-2"><strong>DNI:</strong> <span id="resDni"></span></p>
-                <p class="mb-2"><strong>Apellido:</strong> <span id="resApellido"></span></p>
-                <p class="mb-2"><strong>Nombre completo:</strong> <span id="resNombre"></span></p>
-                <p class="mb-2"><strong>Email:</strong> <span id="resEmail"></span></p>
-                <p class="mb-0"><strong>Turno:</strong> <span id="resTurno"></span></p>
+
+    <div class="form-content">
+
+        <form
+            id="registroForm"
+            novalidate
+        >
+
+            <!-- DNI -->
+
+            <div
+                class="form-group"
+                id="g-dni"
+            >
+
+                <label for="dni">
+                    DNI / Documento *
+                </label>
+
+                <input
+                    type="text"
+                    id="dni"
+                    name="dni"
+                    placeholder="Solo números, sin puntos"
+                    inputmode="numeric"
+                    maxlength="10"
+                    required
+                >
+
+                <div class="error-message">
+                    El DNI debe contener entre 7 y 10 dígitos numéricos.
+                </div>
+
             </div>
-            <button type="button" id="btnOk" class="btn btn-success w-100 py-2 fs-5">Aceptar</button>
-        </div>
+
+
+            <!-- APELLIDO / NOMBRE -->
+
+            <div class="form-row">
+
+                <div
+                    class="form-group"
+                    id="g-apellido"
+                >
+
+                    <label for="apellido">
+                        Apellido *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="apellido"
+                        name="apellido"
+                        placeholder="Ej. Pérez"
+                        required
+                    >
+
+                    <div class="error-message">
+                        El apellido es obligatorio.
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="form-group"
+                    id="g-nombre"
+                >
+
+                    <label for="nombre">
+                        Nombre *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Ej. Juan"
+                        required
+                    >
+
+                    <div class="error-message">
+                        El nombre es obligatorio.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div
+                class="form-group"
+                id="g-email"
+            >
+
+                <label for="email">
+                    Correo Electrónico *
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="ejemplo@correo.com"
+                    required
+                >
+
+                <div class="error-message">
+                    Introduce un correo electrónico válido.
+                </div>
+
+            </div>
+
+
+            <!-- TELEFONO / DIRECCION -->
+
+            <div class="form-row">
+
+                <div
+                    class="form-group"
+                    id="g-telefono"
+                >
+
+                    <label for="telefono">
+                        Teléfono *
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="telefono"
+                        name="telefono"
+                        placeholder="Mínimo 8 dígitos"
+                        inputmode="numeric"
+                        maxlength="15"
+                        required
+                    >
+
+                    <div class="error-message">
+                        El teléfono debe contener entre 8 y 15 números.
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="form-group"
+                    id="g-direccion"
+                >
+
+                    <label for="direccion">
+                        Dirección / Domicilio *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="direccion"
+                        name="direccion"
+                        placeholder="Calle y número"
+                        required
+                    >
+
+                    <div class="error-message">
+                        La dirección es obligatoria.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROVINCIA / LOCALIDAD -->
+
+            <div class="form-row">
+
+                <div
+                    class="form-group"
+                    id="g-provincia"
+                >
+
+                    <label for="provincia">
+                        Provincia *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="provincia"
+                        name="provincia"
+                        placeholder="Ej. Tucumán"
+                        required
+                    >
+
+                    <div class="error-message">
+                        La provincia es obligatoria.
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="form-group"
+                    id="g-localidad"
+                >
+
+                    <label for="localidad">
+                        Localidad *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="localidad"
+                        name="localidad"
+                        placeholder="Ej. San Miguel"
+                        required
+                    >
+
+                    <div class="error-message">
+                        La localidad es obligatoria.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ESCUELA -->
+
+            <div
+                class="form-group"
+                id="g-esc_egreso"
+            >
+
+                <label for="esc_egreso">
+                    Escuela de Egreso *
+                </label>
+
+                <input
+                    type="text"
+                    id="esc_egreso"
+                    name="esc_egreso"
+                    placeholder="Nombre del colegio secundario"
+                    required
+                >
+
+                <div class="error-message">
+                    La escuela de egreso es obligatoria.
+                </div>
+
+            </div>
+
+
+            <!-- DATOS DE LA TRANSFERENCIA -->
+            <div class="aviso-transferencia" role="note">
+                <strong>IMPORTANTE — CUIT/CUIL DE ORIGEN</strong>
+                <p>Ingresá el CUIT o CUIL del <strong>propietario de la cuenta desde la que se realizó la transferencia</strong>, tal como figura en el comprobante. Puede ser una persona distinta del estudiante.</p>
+                <p><strong>NO ingreses el CUIT/CUIL de la Facultad</strong>, que también suele aparecer en el comprobante como destinataria del pago.</p>
+            </div>
+            <div class="form-group" id="g-cuit_origen">
+                <label for="cuit_origen">CUIT/CUIL del titular de la cuenta de origen *</label>
+                <input type="text" id="cuit_origen" name="cuit_origen" inputmode="numeric" maxlength="13" placeholder="11 dígitos, con o sin guiones" required>
+                <div class="error-message">Ingresá un CUIT/CUIL válido del titular de la cuenta de origen.</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" id="g-fecha_transferencia">
+                    <label for="fecha_transferencia">Fecha de la transferencia *</label>
+                    <input type="date" id="fecha_transferencia" name="fecha_transferencia" required>
+                    <div class="error-message">Indicá una fecha válida, no posterior a hoy.</div>
+                </div>
+                <div class="form-group" id="g-monto">
+                    <label for="monto">Monto transferido (ARS) *</label>
+                    <input type="number" id="monto" name="monto" value="60000" min="0.01" max="999999999" step="0.01" required>
+                    <div class="error-message">Ingresá un monto mayor que cero.</div>
+                </div>
+            </div>
+            <p class="nota-monto">Importe de referencia: <strong>$60.000</strong>. Modificá el monto únicamente si transferiste un importe diferente. Los pagos quedan sujetos a verificación administrativa.</p>
+
+            <!-- COMPROBANTE -->
+
+            <div
+                class="form-group"
+                id="g-comprobante"
+            >
+
+                <label for="comprobante">
+                    Comprobante de Pago *
+                </label>
+
+
+                <div
+                    class="comprobante-box"
+                    id="comprobanteBox"
+                >
+
+                    <input
+                        type="file"
+                        id="comprobante"
+                        name="comprobante"
+                        class="comprobante-input"
+                        accept="image/jpeg,image/png"
+                        required
+                    >
+
+
+                    <div class="comprobante-info">
+
+                        Formatos permitidos:
+                        JPG, JPEG o PNG.
+
+                        <br>
+
+                        Tamaño máximo:
+                        5 MB.
+                        <p class="aviso-imagen"><strong>ATENCIÓN:</strong> La imagen debe estar completa, nítida y permitir leer claramente todos los datos: titular y CUIT/CUIL de origen, fecha, monto y número de operación. No adjuntes imágenes recortadas que oculten información.</p>
+
+                    </div>
+
+
+                    <div id="previewContainer">
+
+                        <img
+                            id="previewImagen"
+                            alt="Vista previa del comprobante"
+                        >
+
+                        <div id="nombreArchivo"></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="error-message">
+                    Debes adjuntar el comprobante de pago.
+                </div>
+
+            </div>
+
+
+            <!-- BOTON -->
+
+            <button
+                type="submit"
+                id="btnSubmit"
+            >
+                Enviar Datos al Archivo
+            </button>
+
+
+            <div id="statusText"></div>
+
+        </form>
+
     </div>
 
-    <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4NJJvdhWyopGFcrbrvSHYgtP7Hlm8waSgCIxkcYrOdKaBuQC6OcAJbuBD4-72vwE2Ag/exec";
-        const form = document.getElementById("formInscripcion");
-        const btnEnviar = document.getElementById("btnEnviar");
-        const alertaError = document.getElementById("alertaError");
+</div>
 
-        function mostrarError(mensaje) {
-            alertaError.textContent = mensaje;
-            alertaError.classList.remove("d-none");
-            window.scrollTo({ top: 0, behavior: "smooth" });
+
+<!-- =========================================================
+     PANTALLA DE CONFIRMACIÓN
+========================================================== -->
+
+<div
+    id="pantallaConfirmacion"
+>
+
+    <div class="confirmacion-header">
+
+        <div class="confirmacion-icono">
+            ✓
+        </div>
+
+        <h2>
+            ¡Inscripción realizada!
+        </h2>
+
+        <p>
+            La información fue recibida correctamente.
+        </p>
+
+    </div>
+
+
+    <div class="confirmacion-content">
+
+        <h3>
+            Datos guardados correctamente
+        </h3>
+
+        <p>
+            Tu inscripción fue registrada
+            junto con el comprobante. El pago queda sujeto a verificación bancaria y administrativa.
+        </p>
+
+
+        <div class="numero-inscripcion">
+
+            <span>
+                Número de inscripción
+            </span>
+
+            <strong
+                id="numeroInscripcion"
+            >
+                -
+            </strong>
+
+        </div>
+
+
+        <p>
+            Puedes finalizar y volver al formulario
+            para realizar una nueva inscripción.
+        </p>
+
+
+        <button
+            type="button"
+            id="btnFinalizar"
+        >
+            Finalizar
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+// ============================================================
+// URL DE APPS SCRIPT
+// ============================================================
+
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx__A1MKVJnNSaho3zofkS_jj7OCm2RwlIi5XyAJ0HOpGFN1p620jbWHSoTnFSne7_xcg/exec";
+
+
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
+
+const MAX_FILE_SIZE =
+    5 * 1024 * 1024;
+
+
+// ============================================================
+// ELEMENTOS
+// ============================================================
+
+const form =
+    document.getElementById("registroForm");
+
+const btnSubmit =
+    document.getElementById("btnSubmit");
+
+const statusText =
+    document.getElementById("statusText");
+
+const comprobante =
+    document.getElementById("comprobante");
+
+const comprobanteBox =
+    document.getElementById("comprobanteBox");
+
+const previewContainer =
+    document.getElementById("previewContainer");
+
+const previewImagen =
+    document.getElementById("previewImagen");
+
+const nombreArchivo =
+    document.getElementById("nombreArchivo");
+
+const formularioContainer =
+    document.getElementById("formularioContainer");
+
+const pantallaConfirmacion =
+    document.getElementById("pantallaConfirmacion");
+
+const numeroInscripcion =
+    document.getElementById("numeroInscripcion");
+
+const btnFinalizar =
+    document.getElementById("btnFinalizar");
+
+
+// ============================================================
+// EXPRESIONES
+// ============================================================
+
+const expresiones = {
+
+    dni:
+        /^\d{7,10}$/,
+
+    nombre:
+        /^[a-zA-ZÀ-ÿ\s]{2,40}$/,
+
+    apellido:
+        /^[a-zA-ZÀ-ÿ\s]{2,40}$/,
+
+    email:
+        /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+
+    telefono:
+        /^\d{8,15}$/
+
+};
+
+
+// ============================================================
+// CAMPOS VÁLIDOS
+// ============================================================
+
+const camposValidos = {
+
+    dni: false,
+    apellido: false,
+    nombre: false,
+    email: false,
+    telefono: false,
+    direccion: false,
+    provincia: false,
+    localidad: false,
+    esc_egreso: false,
+    comprobante: false,
+    cuit_origen: false,
+    fecha_transferencia: false,
+    monto: false
+
+};
+
+
+// ============================================================
+// VALIDAR REGEX
+// ============================================================
+
+function validarCampoRegEx(
+    expresion,
+    input,
+    campo
+) {
+
+    const grupo =
+        document.getElementById(
+            `g-${campo}`
+        );
+
+
+    if (
+        expresion.test(
+            input.value.trim()
+        )
+    ) {
+
+        grupo.classList.remove(
+            "invalido"
+        );
+
+        grupo.classList.add(
+            "valido"
+        );
+
+        camposValidos[campo] =
+            true;
+
+    } else {
+
+        grupo.classList.remove(
+            "valido"
+        );
+
+        grupo.classList.add(
+            "invalido"
+        );
+
+        camposValidos[campo] =
+            false;
+
+    }
+
+}
+
+
+// ============================================================
+// VALIDAR VACÍO
+// ============================================================
+
+function validarCampoVacio(
+    input,
+    campo
+) {
+
+    const grupo =
+        document.getElementById(
+            `g-${campo}`
+        );
+
+
+    if (
+        input.value.trim() !== ""
+    ) {
+
+        grupo.classList.remove(
+            "invalido"
+        );
+
+        grupo.classList.add(
+            "valido"
+        );
+
+        camposValidos[campo] =
+            true;
+
+    } else {
+
+        grupo.classList.remove(
+            "valido"
+        );
+
+        grupo.classList.add(
+            "invalido"
+        );
+
+        camposValidos[campo] =
+            false;
+
+    }
+
+}
+
+
+// ============================================================
+// VALIDAR COMPROBANTE
+// ============================================================
+
+function validarComprobante() {
+
+    const grupo =
+        document.getElementById(
+            "g-comprobante"
+        );
+
+    const archivo =
+        comprobante.files[0];
+
+
+    if (!archivo) {
+
+        grupo.classList.remove(
+            "valido"
+        );
+
+        grupo.classList.add(
+            "invalido"
+        );
+
+        comprobanteBox.classList.remove(
+            "valido"
+        );
+
+        comprobanteBox.classList.add(
+            "invalido"
+        );
+
+        camposValidos.comprobante =
+            false;
+
+        return false;
+
+    }
+
+
+    const tiposPermitidos = [
+
+        "image/jpeg",
+        "image/png"
+
+    ];
+
+
+    if (
+        !tiposPermitidos.includes(
+            archivo.type
+        )
+    ) {
+
+        grupo.classList.remove(
+            "valido"
+        );
+
+        grupo.classList.add(
+            "invalido"
+        );
+
+        comprobanteBox.classList.remove(
+            "valido"
+        );
+
+        comprobanteBox.classList.add(
+            "invalido"
+        );
+
+        camposValidos.comprobante =
+            false;
+
+        statusText.className =
+            "error-general";
+
+        statusText.innerText =
+            "El comprobante debe ser JPG, JPEG o PNG.";
+
+        return false;
+
+    }
+
+
+    if (
+        archivo.size >
+        MAX_FILE_SIZE
+    ) {
+
+        grupo.classList.remove(
+            "valido"
+        );
+
+        grupo.classList.add(
+            "invalido"
+        );
+
+        comprobanteBox.classList.remove(
+            "valido"
+        );
+
+        comprobanteBox.classList.add(
+            "invalido"
+        );
+
+        camposValidos.comprobante =
+            false;
+
+        statusText.className =
+            "error-general";
+
+        statusText.innerText =
+            "El comprobante no puede superar los 5 MB.";
+
+        return false;
+
+    }
+
+
+    grupo.classList.remove(
+        "invalido"
+    );
+
+    grupo.classList.add(
+        "valido"
+    );
+
+    comprobanteBox.classList.remove(
+        "invalido"
+    );
+
+    comprobanteBox.classList.add(
+        "valido"
+    );
+
+    camposValidos.comprobante =
+        true;
+
+    return true;
+
+}
+
+
+// ============================================================
+// VISTA PREVIA DEL COMPROBANTE
+// ============================================================
+
+comprobante.addEventListener(
+    "change",
+    function() {
+
+        statusText.innerText = "";
+        statusText.className = "";
+
+
+        const archivo =
+            comprobante.files[0];
+
+
+        if (!archivo) {
+
+            previewContainer.style.display =
+                "none";
+
+            previewImagen.src = "";
+
+            nombreArchivo.innerText = "";
+
+            validarComprobante();
+
+            return;
+
         }
 
-        function archivoABase64(archivo) {
-            return new Promise((resolve, reject) => {
-                const lector = new FileReader();
-                lector.onload = () => {
-                    const resultado = String(lector.result || "");
-                    resolve(resultado.substring(resultado.indexOf(",") + 1));
-                };
-                lector.onerror = () => reject(new Error("No se pudo leer el comprobante."));
-                lector.readAsDataURL(archivo);
-            });
+
+        if (
+            !validarComprobante()
+        ) {
+
+            previewContainer.style.display =
+                "none";
+
+            previewImagen.src = "";
+
+            nombreArchivo.innerText = "";
+
+            return;
+
         }
 
-        form.addEventListener("submit", async function(e) {
-            e.preventDefault();
-            alertaError.classList.add("d-none");
 
-            const archivo = document.getElementById("comprobante").files[0];
-            if (!archivo) {
-                mostrarError("Debés adjuntar el comprobante de pago.");
-                return;
-            }
-            if (!["image/jpeg", "image/png"].includes(archivo.type)) {
-                mostrarError("El comprobante debe ser una imagen JPG o PNG.");
-                return;
-            }
-            if (archivo.size > 5 * 1024 * 1024) {
-                mostrarError("El comprobante supera los 5 MB. Elegí una imagen más pequeña.");
-                return;
-            }
+        nombreArchivo.innerText =
+            archivo.name;
 
-            btnEnviar.disabled = true;
-            btnEnviar.textContent = "Procesando inscripción...";
 
-            try {
-                const datos = {
-                    dni: document.getElementById("dni").value.trim(),
-                    apellido: document.getElementById("apellido").value.trim(),
-                    nombre: document.getElementById("nombre").value.trim(),
-                    email: document.getElementById("email").value.trim(),
-                    telefono: document.getElementById("telefono").value.trim(),
-                    direccion: document.getElementById("direccion").value.trim(),
-                    provincia: document.getElementById("provincia").value.trim(),
-                    localidad: document.getElementById("localidad").value.trim(),
-                    esc_egreso: document.getElementById("esc_egreso").value.trim(),
-                    turno: document.getElementById("turno").value,
-                    comprobanteBase64: await archivoABase64(archivo),
-                    comprobanteNombre: archivo.name,
-                    comprobanteTipo: archivo.type
-                };
+        const lector =
+            new FileReader();
 
-                const cuerpo = new URLSearchParams(datos);
-                const response = await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    body: cuerpo
-                });
-                const res = await response.json();
 
-                if (res.status !== "success") {
-                    throw new Error(res.message || "No se pudo completar la inscripción.");
+        lector.onload =
+            function(event) {
+
+                previewImagen.src =
+                    event.target.result;
+
+                previewContainer.style.display =
+                    "block";
+
+            };
+
+
+        lector.onerror =
+            function() {
+
+                previewContainer.style.display =
+                    "none";
+
+                statusText.className =
+                    "error-general";
+
+                statusText.innerText =
+                    "No fue posible visualizar el comprobante.";
+
+            };
+
+
+        lector.readAsDataURL(
+            archivo
+        );
+
+    }
+);
+
+
+
+// Validaciones de los datos declarados de la transferencia.
+function normalizarCuit(valor) { return String(valor).replace(/[\s-]/g, ""); }
+function validarCuit(valor) {
+    const c = normalizarCuit(valor);
+    if (!/^\d{11}$/.test(c)) return false;
+    const pesos = [5,4,3,2,7,6,5,4,3,2];
+    let suma = 0;
+    for (let i=0;i<10;i++) suma += Number(c[i])*pesos[i];
+    const resto = 11 - (suma % 11);
+    return Number(c[10]) === (resto === 11 ? 0 : resto === 10 ? 9 : resto);
+}
+function fechaValida(valor) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(valor)) return false;
+    const d = new Date(valor + "T12:00:00");
+    return !isNaN(d.getTime()) && d.getFullYear() === Number(valor.slice(0,4)) &&
+      d.getMonth()+1 === Number(valor.slice(5,7)) && d.getDate() === Number(valor.slice(8,10)) &&
+      valor <= [new Date().getFullYear(), String(new Date().getMonth()+1).padStart(2,'0'), String(new Date().getDate()).padStart(2,'0')].join('-');
+}
+function montoValido(valor) { const n = Number(valor); return String(valor).trim() !== '' && Number.isFinite(n) && n > 0 && n <= 999999999; }
+function validarEspecial(campo, valido) {
+    const grupo = document.getElementById('g-' + campo);
+    grupo.classList.toggle('valido', valido);
+    grupo.classList.toggle('invalido', !valido);
+    camposValidos[campo] = valido;
+}
+
+// ============================================================
+// VALIDACIÓN EN TIEMPO REAL
+// ============================================================
+
+form.addEventListener(
+    "input",
+    validarEntrada
+);
+
+
+form.addEventListener(
+    "blur",
+    validarEntrada,
+    true
+);
+
+
+function validarEntrada(e) {
+
+    if (!e.target.name) {
+
+        return;
+
+    }
+
+
+    switch (
+        e.target.name
+    ) {
+
+        case "dni":
+
+            validarCampoRegEx(
+                expresiones.dni,
+                e.target,
+                "dni"
+            );
+
+            break;
+
+
+        case "apellido":
+
+            validarCampoRegEx(
+                expresiones.apellido,
+                e.target,
+                "apellido"
+            );
+
+            break;
+
+
+        case "nombre":
+
+            validarCampoRegEx(
+                expresiones.nombre,
+                e.target,
+                "nombre"
+            );
+
+            break;
+
+
+        case "email":
+
+            validarCampoRegEx(
+                expresiones.email,
+                e.target,
+                "email"
+            );
+
+            break;
+
+
+        case "telefono":
+
+            validarCampoRegEx(
+                expresiones.telefono,
+                e.target,
+                "telefono"
+            );
+
+            break;
+
+
+        case "direccion":
+
+            validarCampoVacio(
+                e.target,
+                "direccion"
+            );
+
+            break;
+
+
+        case "provincia":
+
+            validarCampoVacio(
+                e.target,
+                "provincia"
+            );
+
+            break;
+
+
+        case "localidad":
+
+            validarCampoVacio(
+                e.target,
+                "localidad"
+            );
+
+            break;
+
+
+        case "cuit_origen":
+            validarEspecial("cuit_origen", validarCuit(e.target.value));
+            break;
+        case "fecha_transferencia":
+            validarEspecial("fecha_transferencia", fechaValida(e.target.value));
+            break;
+        case "monto":
+            validarEspecial("monto", montoValido(e.target.value));
+            break;
+
+        case "esc_egreso":
+
+            validarCampoVacio(
+                e.target,
+                "esc_egreso"
+            );
+
+            break;
+
+    }
+
+}
+
+
+// ============================================================
+// VERIFICAR DNI Y EMAIL EN GOOGLE
+// ============================================================
+
+function verificarDuplicados(dni, email) {
+
+    const MAX_INTENTOS = 3;
+
+    const TIEMPO_ESPERA = 7000;
+
+
+    function realizarIntento() {
+
+        return new Promise(
+            function(resolve, reject) {
+
+                const callbackName =
+                    "respuestaVerificacion_" +
+                    Date.now() +
+                    "_" +
+                    Math.floor(
+                        Math.random() * 100000
+                    );
+
+
+                const script =
+                    document.createElement(
+                        "script"
+                    );
+
+
+                let finalizado = false;
+
+                let timeoutId = null;
+
+
+                function limpiar() {
+
+                    if (timeoutId) {
+
+                        clearTimeout(
+                            timeoutId
+                        );
+
+                    }
+
+
+                    try {
+
+                        delete window[
+                            callbackName
+                        ];
+
+                    } catch (error) {
+
+                        window[
+                            callbackName
+                        ] = undefined;
+
+                    }
+
+
+                    if (
+                        script.parentNode
+                    ) {
+
+                        script.parentNode.removeChild(
+                            script
+                        );
+
+                    }
+
                 }
 
-                document.getElementById("resId").textContent = res.idInscripcion;const SCRIPT_URL
-                document.getElementById("resDni").textContent = datos.dni;
-                document.getElementById("resApellido").textContent = datos.apellido;
-                document.getElementById("resNombre").textContent = datos.nombre;
-                document.getElementById("resEmail").textContent = datos.email;
-                document.getElementById("resTurno").textContent = datos.turno;
-                document.getElementById("modalConfirmacion").style.display = "flex";
-            } catch (error) {
-                mostrarError(error.message || "Hubo un error de conexión. Verificá el despliegue y los permisos de Apps Script.");
-            } finally {
-                btnEnviar.disabled = false;
-                btnEnviar.textContent = "Enviar formulario";
-            }
-        });
 
-        document.getElementById("btnOk").addEventListener("click", function() {
-            document.getElementById("modalConfirmacion").style.display = "none";
-            form.reset();
+                window[
+                    callbackName
+                ] = function(resultado) {
+
+                    if (finalizado) {
+
+                        return;
+
+                    }
+
+
+                    finalizado = true;
+
+
+                    limpiar();
+
+
+                    resolve(
+                        resultado
+                    );
+
+                };
+
+
+                script.onerror =
+                    function() {
+
+                        if (finalizado) {
+
+                            return;
+
+                        }
+
+
+                        finalizado = true;
+
+
+                        limpiar();
+
+
+                        reject(
+                            new Error(
+                                "No fue posible verificar los datos."
+                            )
+                        );
+
+                    };
+
+
+                const url =
+                    GOOGLE_SCRIPT_URL +
+                    "?accion=verificar" +
+                    "&dni=" +
+                    encodeURIComponent(dni) +
+                    "&email=" +
+                    encodeURIComponent(email) +
+                    "&callback=" +
+                    encodeURIComponent(callbackName) +
+                    "&_=" +
+                    Date.now();
+
+
+                script.src =
+                    url;
+
+
+                document.body.appendChild(
+                    script
+                );
+
+
+                timeoutId =
+                    setTimeout(
+                        function() {
+
+                            if (finalizado) {
+
+                                return;
+
+                            }
+
+
+                            finalizado = true;
+
+
+                            limpiar();
+
+
+                            reject(
+                                new Error(
+                                    "La verificación tardó demasiado."
+                                )
+                            );
+
+                        },
+                        TIEMPO_ESPERA
+                    );
+
+            }
+        );
+
+    }
+
+
+    return (
+        async function() {
+
+            let ultimoError =
+                null;
+
+
+            for (
+                let numeroIntento = 1;
+                numeroIntento <= MAX_INTENTOS;
+                numeroIntento++
+            ) {
+
+                try {
+
+                    const resultado =
+                        await realizarIntento();
+
+
+                    if (
+                        resultado &&
+                        resultado.status ===
+                        "success"
+                    ) {
+
+                        return resultado;
+
+                    }
+
+
+                    throw new Error(
+                        "Respuesta inválida del servidor."
+                    );
+
+
+                } catch (error) {
+
+                    ultimoError =
+                        error;
+
+
+                    if (
+                        numeroIntento <
+                        MAX_INTENTOS
+                    ) {
+
+                        await new Promise(
+                            function(resolve) {
+
+                                setTimeout(
+                                    resolve,
+                                    500
+                                );
+
+                            }
+                        );
+
+                    }
+
+                }
+
+            }
+
+
+            throw (
+                ultimoError ||
+                new Error(
+                    "No fue posible verificar los datos."
+                )
+            );
+
+        }
+    )();
+
+}
+
+
+// Consulta el estado de una solicitud concreta mediante JSONP.
+function consultarEstado(solicitudId) {
+    return new Promise((resolve, reject) => {
+        const callbackName = 'respuestaEstado_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+        const script = document.createElement('script');
+        let terminado = false;
+        const timeout = setTimeout(() => finalizar(new Error('Tiempo de espera agotado.')), 10000);
+        function finalizar(error, datos) {
+            if (terminado) return;
+            terminado = true;
+            clearTimeout(timeout);
+            delete window[callbackName];
+            script.remove();
+            if (error) reject(error); else resolve(datos);
+        }
+        window[callbackName] = datos => finalizar(null, datos);
+        script.onerror = () => finalizar(new Error('No se pudo consultar el estado.'));
+        const parametros = new URLSearchParams({
+            accion: 'estado', solicitudId, callback: callbackName, _: String(Date.now())
         });
-    </script>
+        script.src = GOOGLE_SCRIPT_URL + '?' + parametros.toString();
+        document.body.appendChild(script);
+    });
+}
+
+function crearSolicitudId() {
+    if (crypto.randomUUID) return crypto.randomUUID();
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 15) | 64;
+    bytes[8] = (bytes[8] & 63) | 128;
+    const s = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+    return s.slice(0,8)+'-'+s.slice(8,12)+'-'+s.slice(12,16)+'-'+s.slice(16,20)+'-'+s.slice(20);
+}
+
+// ============================================================
+// CONVERTIR ARCHIVO A BASE64
+// ============================================================
+
+function archivoABase64(
+    archivo
+) {
+
+    return new Promise(
+        function(resolve, reject) {
+
+            const lector =
+                new FileReader();
+
+
+            lector.onload =
+                function() {
+
+                    const resultado =
+                        lector.result;
+
+
+                    const base64 =
+                        resultado
+                            .split(",")[1];
+
+
+                    resolve(
+                        base64
+                    );
+
+                };
+
+
+            lector.onerror =
+                function(error) {
+
+                    reject(
+                        error
+                    );
+
+                };
+
+
+            lector.readAsDataURL(
+                archivo
+            );
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// MOSTRAR ERROR DE DUPLICADO
+// ============================================================
+
+function mostrarErrorDuplicado(
+    campo,
+    mensaje
+) {
+
+    const grupo =
+        document.getElementById(
+            `g-${campo}`
+        );
+
+
+    grupo.classList.remove(
+        "valido"
+    );
+
+
+    grupo.classList.add(
+        "invalido"
+    );
+
+
+    const mensajeError =
+        grupo.querySelector(
+            ".error-message"
+        );
+
+
+    if (mensajeError) {
+
+        mensajeError.innerText =
+            mensaje;
+
+    }
+
+
+    camposValidos[campo] =
+        false;
+
+
+    statusText.className =
+        "error-general";
+
+
+    statusText.innerText =
+        mensaje;
+
+
+    const input =
+        document.getElementById(
+            campo
+        );
+
+
+    if (input) {
+
+        input.focus();
+
+    }
+
+}
+
+
+// ============================================================
+// RESTAURAR MENSAJES ORIGINALES
+// ============================================================
+
+function restaurarMensajes() {
+
+    document.querySelector(
+        "#g-dni .error-message"
+    ).innerText =
+        "El DNI debe contener entre 7 y 10 dígitos numéricos.";
+
+
+    document.querySelector(
+        "#g-email .error-message"
+    ).innerText =
+        "Introduce un correo electrónico válido.";
+
+}
+
+
+// ============================================================
+// MOSTRAR CONFIRMACIÓN
+// ============================================================
+
+function mostrarConfirmacion(
+    id
+) {
+
+    numeroInscripcion.innerText =
+        id;
+
+
+    formularioContainer.style.display =
+        "none";
+
+
+    pantallaConfirmacion.style.display =
+        "block";
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
+// ============================================================
+// LIMPIAR FORMULARIO COMPLETAMENTE
+// ============================================================
+
+function limpiarFormulario() {
+
+    form.reset();
+    document.getElementById("monto").value = "60000";
+
+
+    previewContainer.style.display =
+        "none";
+
+
+    previewImagen.src =
+        "";
+
+
+    nombreArchivo.innerText =
+        "";
+
+
+    comprobanteBox.classList.remove(
+        "valido",
+        "invalido"
+    );
+
+
+    document
+        .querySelectorAll(
+            ".form-group"
+        )
+        .forEach(
+            function(grupo) {
+
+                grupo.classList.remove(
+                    "valido",
+                    "invalido"
+                );
+
+            }
+        );
+
+
+    Object.keys(
+        camposValidos
+    ).forEach(
+        function(campo) {
+
+            camposValidos[campo] =
+                false;
+
+        }
+    );
+
+
+    statusText.innerText =
+        "";
+
+
+    statusText.className =
+        "";
+
+
+    restaurarMensajes();
+
+
+    btnSubmit.disabled =
+        false;
+
+
+    btnSubmit.innerText =
+        "Enviar Datos al Archivo";
+
+}
+
+
+// ============================================================
+// BOTÓN FINALIZAR
+// ============================================================
+
+btnFinalizar.addEventListener(
+    "click",
+    function() {
+
+        limpiarFormulario();
+
+
+        pantallaConfirmacion.style.display =
+            "none";
+
+
+        formularioContainer.style.display =
+            "block";
+
+
+        window.scrollTo(
+            0,
+            0
+        );
+
+    }
+);
+
+
+// ============================================================
+// SUBMIT
+// ============================================================
+
+form.addEventListener(
+    "submit",
+    async function(e) {
+
+        e.preventDefault();
+
+
+        statusText.innerText =
+            "";
+
+        statusText.className =
+            "";
+
+
+        restaurarMensajes();
+
+
+        // ====================================================
+        // VALIDACIONES
+        // ====================================================
+
+        validarCampoRegEx(
+            expresiones.dni,
+            document.getElementById("dni"),
+            "dni"
+        );
+
+
+        validarCampoRegEx(
+            expresiones.apellido,
+            document.getElementById("apellido"),
+            "apellido"
+        );
+
+
+        validarCampoRegEx(
+            expresiones.nombre,
+            document.getElementById("nombre"),
+            "nombre"
+        );
+
+
+        validarCampoRegEx(
+            expresiones.email,
+            document.getElementById("email"),
+            "email"
+        );
+
+
+        validarCampoRegEx(
+            expresiones.telefono,
+            document.getElementById("telefono"),
+            "telefono"
+        );
+
+
+        validarCampoVacio(
+            document.getElementById("direccion"),
+            "direccion"
+        );
+
+
+        validarCampoVacio(
+            document.getElementById("provincia"),
+            "provincia"
+        );
+
+
+        validarCampoVacio(
+            document.getElementById("localidad"),
+            "localidad"
+        );
+
+
+        validarCampoVacio(
+            document.getElementById("esc_egreso"),
+            "esc_egreso"
+        );
+
+
+        validarEspecial("cuit_origen", validarCuit(document.getElementById("cuit_origen").value));
+        validarEspecial("fecha_transferencia", fechaValida(document.getElementById("fecha_transferencia").value));
+        validarEspecial("monto", montoValido(document.getElementById("monto").value));
+        validarComprobante();
+
+
+        // ====================================================
+        // COMPROBAR CAMPOS
+        // ====================================================
+
+        const todoValido =
+            Object.values(
+                camposValidos
+            ).every(
+                function(valor) {
+
+                    return valor === true;
+
+                }
+            );
+
+
+        if (!todoValido) {
+
+            statusText.className =
+                "error-general";
+
+
+            statusText.innerText =
+                "Revisa los campos marcados en rojo.";
+
+
+            return;
+
+        }
+
+
+        const dni =
+            document
+                .getElementById("dni")
+                .value
+                .trim();
+
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        const archivo =
+            comprobante.files[0];
+
+
+        if (!archivo) {
+
+            statusText.className =
+                "error-general";
+
+
+            statusText.innerText =
+                "Debes adjuntar el comprobante de pago.";
+
+
+            return;
+
+        }
+
+
+        // ====================================================
+        // BLOQUEAR
+        // ====================================================
+
+        btnSubmit.disabled =
+            true;
+
+
+        btnSubmit.innerText =
+            "Verificando datos...";
+
+
+        statusText.innerText =
+            "Comprobando DNI y correo electrónico...";
+
+
+        try {
+
+
+            // =================================================
+            // VERIFICAR DNI / EMAIL
+            // =================================================
+
+            const resultado =
+                await verificarDuplicados(
+                    dni,
+                    email
+                );
+
+
+            // =================================================
+            // DNI REPETIDO
+            // =================================================
+
+            if (
+                resultado.dniExiste
+            ) {
+
+                mostrarErrorDuplicado(
+
+                    "dni",
+
+                    "El DNI ingresado ya se encuentra registrado."
+
+                );
+
+
+                btnSubmit.disabled =
+                    false;
+
+
+                btnSubmit.innerText =
+                    "Enviar Datos al Archivo";
+
+
+                return;
+
+            }
+
+
+            // =================================================
+            // EMAIL REPETIDO
+            // =================================================
+
+            if (
+                resultado.emailExiste
+            ) {
+
+                mostrarErrorDuplicado(
+
+                    "email",
+
+                    "El Correo Electrónico ingresado ya se encuentra registrado."
+
+                );
+
+
+                btnSubmit.disabled =
+                    false;
+
+
+                btnSubmit.innerText =
+                    "Enviar Datos al Archivo";
+
+
+                return;
+
+            }
+
+
+            // =================================================
+            // CONVERTIR COMPROBANTE
+            // =================================================
+
+            btnSubmit.innerText =
+                "Procesando comprobante...";
+
+
+            statusText.innerText =
+                "Preparando el comprobante de pago...";
+
+
+            const base64 =
+                await archivoABase64(
+                    archivo
+                );
+
+
+            // =================================================
+            // CREAR DATOS
+            // =================================================
+
+            const datos =
+                new URLSearchParams();
+
+
+            datos.append(
+                "dni",
+                dni
+            );
+
+
+            datos.append(
+                "apellido",
+                document
+                    .getElementById("apellido")
+                    .value
+                    .trim()
+            );
+
+
+            datos.append(
+                "nombre",
+                document
+                    .getElementById("nombre")
+                    .value
+                    .trim()
+            );
+
+
+            datos.append(
+                "email",
+                email
+            );
+
+
+            datos.append(
+                "telefono",
+                document
+                    .getElementById("telefono")
+                    .value
+                    .trim()
+            );
+
+
+            datos.append(
+                "direccion",
+                document
+                    .getElementById("direccion")
+                    .value
+                    .trim()
+            );
+
+
+            datos.append(
+                "provincia",
+                document
+                    .getElementById("provincia")
+                    .value
+                    .trim()
+            );
+
+
+            datos.append(
+                "localidad",
+                document
+                    .getElementById("localidad")
+                    .value
+                    .trim()
+            );
+
+
+            datos.append(
+                "esc_egreso",
+                document
+                    .getElementById("esc_egreso")
+                    .value
+                    .trim()
+            );
+
+
+            datos.append("cuit_origen", normalizarCuit(document.getElementById("cuit_origen").value));
+            datos.append("fecha_transferencia", document.getElementById("fecha_transferencia").value);
+            datos.append("monto", document.getElementById("monto").value);
+
+            datos.append(
+                "comprobanteBase64",
+                base64
+            );
+
+
+            datos.append(
+                "comprobanteNombre",
+                archivo.name
+            );
+
+
+            datos.append(
+                "comprobanteTipo",
+                archivo.type
+            );
+
+
+            const solicitudId = crearSolicitudId();
+            datos.append('solicitudId', solicitudId);
+
+            // =================================================
+            // ENVIAR
+            // =================================================
+
+            btnSubmit.innerText =
+                "Enviando información...";
+
+
+            statusText.innerText =
+                "Guardando datos y comprobante...";
+
+
+            await fetch(
+
+                GOOGLE_SCRIPT_URL,
+
+                {
+
+                    method:
+                        "POST",
+
+                    mode:
+                        "no-cors",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/x-www-form-urlencoded;charset=UTF-8"
+
+                    },
+
+                    body:
+                        datos.toString()
+
+                }
+
+            );
+
+
+            // =================================================
+            // CONFIRMACIÓN
+            // =================================================
+
+            // Consultar exclusivamente el estado de esta solicitud.
+            // Nunca confirmar basándose únicamente en DNI o correo existentes.
+            let estado = null;
+            for (let intento = 0; intento < 8; intento++) {
+                await new Promise(resolve => setTimeout(resolve, 1800));
+                try {
+                    estado = await consultarEstado(solicitudId);
+                    if (estado && estado.status === 'success') break;
+                } catch (_) { /* Una consulta puede fallar transitoriamente. */ }
+            }
+            if (estado && estado.status === 'success' && estado.idInscripcion != null) {
+                mostrarConfirmacion(estado.idInscripcion);
+            } else {
+                statusText.className = "error-general";
+                statusText.innerText = "No se pudo confirmar esta inscripción. No vuelvas a enviarla: consultá con administración para evitar duplicaciones.";
+                btnSubmit.innerText = "Confirmación pendiente";
+            }
+
+
+        } catch (error) {
+
+
+            console.error(
+                "Error:",
+                error
+            );
+
+
+            statusText.className =
+                "error-general";
+
+
+            statusText.innerText =
+                "No fue posible completar o confirmar la operación. Antes de volver a enviar, consultá con administración para evitar duplicaciones.";
+
+
+            btnSubmit.disabled =
+                false;
+
+
+            btnSubmit.innerText =
+                "Enviar Datos al Archivo";
+
+        }
+
+    }
+);
+
+</script>
+
 </body>
+
 </html>
