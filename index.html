@@ -1002,7 +1002,7 @@ button:disabled {
             <!-- DATOS DE LA TRANSFERENCIA -->
             <div class="aviso-transferencia" role="note">
                 <strong>IMPORTANTE — CUIT/CUIL DE ORIGEN</strong>
-                <p>Ingresá el CUIT o CUIL del <strong>propietario de la cuenta desde la que se realizó la transferencia</strong>, 11 Digitos si guiones ni separacion. Puede ser una persona distinta del estudiante.</p>
+                <p>Ingresá el CUIT o CUIL del <strong>propietario de la cuenta desde la que se realizó la transferencia</strong> </p>
             </div>
             <div class="form-group" id="g-cuit_origen">
                 <label for="cuit_origen">CUIT/CUIL del titular de la cuenta de origen *</label>
@@ -1072,15 +1072,14 @@ button:disabled {
                         >
 
                         <div id="nombreArchivo"></div>
-                        <div id="ocrAviso" class="ocr-aviso" role="status" aria-live="polite" hidden>
+                    </div>
+                    <div id="ocrAviso" class="ocr-aviso" role="status" aria-live="polite" hidden>
                             <div id="ocrMensaje"></div>
                             <label id="ocrConfirmacion" hidden style="display:none">
                                 <input type="checkbox" id="ocrConfirmado">
                                 Confirmo que la imagen seleccionada corresponde a mi comprobante de pago.
                             </label>
                         </div>
-
-                    </div>
 
                 </div>
 
@@ -1097,6 +1096,7 @@ button:disabled {
             <button
                 type="submit"
                 id="btnSubmit"
+                disabled
             >
                 Enviar Datos al Archivo
             </button>
@@ -1627,13 +1627,33 @@ comprobante.addEventListener(
 
 
 // OCR preventivo: local al navegador, no modifica el archivo original.
-const OCR_ESPERA_ENVIO = 5000;
 const OCR_LIMITE_ANALISIS = 45000;
 const ocrAviso = document.getElementById('ocrAviso');
 const ocrMensaje = document.getElementById('ocrMensaje');
 const ocrConfirmacion = document.getElementById('ocrConfirmacion');
 const ocrConfirmado = document.getElementById('ocrConfirmado');
 let ocrActual = null;
+let envioEnCurso = false;
+function ocrPermiteEnvio(archivo = comprobante.files[0]) {
+    return !!archivo && !!ocrActual && ocrActual.archivo === archivo &&
+        (ocrActual.estado === 'reconocido' ||
+         (['dudoso', 'pendiente'].includes(ocrActual.estado) && ocrConfirmado.checked));
+}
+function actualizarBotonOCR() {
+    btnSubmit.disabled = envioEnCurso || !ocrPermiteEnvio();
+    if (envioEnCurso) return;
+    btnSubmit.innerText = !comprobante.files[0] ? 'Adjunta un comprobante' :
+        ocrActual?.estado === 'analizando' ? 'Analizando comprobante...' :
+        !ocrPermiteEnvio() ? 'Verifica o confirma el comprobante' : 'Enviar Datos al Archivo';
+}
+ocrConfirmado.addEventListener('change', actualizarBotonOCR);
+actualizarBotonOCR();
+function liberarEnvio() {
+    envioEnCurso = false;
+    comprobante.disabled = false;
+    ocrConfirmado.disabled = false;
+    actualizarBotonOCR();
+}
 let ocrBiblioteca = null;
 function cargarOCR() {
     if (window.Tesseract) return Promise.resolve(window.Tesseract);
@@ -1654,9 +1674,11 @@ function mostrarOCR(tarea, estado, mensaje) {
     ocrAviso.hidden = false;
     ocrAviso.dataset.estado = estado;
     ocrMensaje.textContent = mensaje;
-    const confirmar = estado === 'dudoso';
+    const confirmar = estado === 'dudoso' || estado === 'pendiente';
+    ocrConfirmado.checked = false;
     ocrConfirmacion.hidden = !confirmar;
     ocrConfirmacion.style.display = confirmar ? 'flex' : 'none';
+    actualizarBotonOCR();
 }
 function cancelarOCR() {
     const tarea = ocrActual;
@@ -1670,6 +1692,7 @@ function cancelarOCR() {
     ocrConfirmado.checked = false;
     ocrConfirmacion.hidden = true;
     ocrConfirmacion.style.display = 'none';
+    actualizarBotonOCR();
 }
 function clasificarTextoOCR(texto) {
     const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -1704,7 +1727,7 @@ function iniciarOCR(archivo) {
         let timer;
         tarea.finalizar = () => { clearTimeout(timer); resolve(); };
         timer = setTimeout(() => {
-            mostrarOCR(tarea, 'pendiente', 'No se completó el análisis automático. La imagen será revisada posteriormente.');
+            mostrarOCR(tarea, 'pendiente', 'No se completó el análisis automático. Revisa la imagen y confirma que es correcta o reemplázala.');
             tarea.cancelada = true;
             if (tarea.worker) tarea.worker.terminate().catch(() => {});
             tarea.finalizar();
@@ -1730,7 +1753,7 @@ function iniciarOCR(archivo) {
                     mostrarOCR(tarea, 'dudoso', 'No pudimos identificar claramente un comprobante de transferencia. Revisa la imagen, reemplázala o confirma que es correcta.');
                 }
             } catch (_) {
-                if (!tarea.cancelada) mostrarOCR(tarea, 'pendiente', 'No fue posible realizar el análisis automático. Puedes continuar; la imagen será revisada posteriormente.');
+                if (!tarea.cancelada) mostrarOCR(tarea, 'pendiente', 'No fue posible realizar el análisis automático. Revisa la imagen y confirma que es correcta o reemplázala.');
             } finally {
                 if (tarea.worker) tarea.worker.terminate().catch(() => {});
                 tarea.finalizar();
@@ -1738,24 +1761,6 @@ function iniciarOCR(archivo) {
         })();
     });
 }
-async function verificarOCRAntesDeEnviar(archivo) {
-    const tarea = ocrActual;
-    if (!tarea || tarea.archivo !== archivo) return true;
-    if (tarea.estado === 'analizando') {
-        let timer;
-        await Promise.race([tarea.promesa, new Promise(resolve => {timer = setTimeout(resolve, OCR_ESPERA_ENVIO);})]);
-        clearTimeout(timer);
-    }
-    if (ocrActual !== tarea || comprobante.files[0] !== archivo) return false;
-    if (tarea.estado === 'analizando') {
-        mostrarOCR(tarea, 'pendiente', 'Análisis pendiente. Puedes continuar con la inscripción.');
-        tarea.cancelada = true;
-        if (tarea.worker) tarea.worker.terminate().catch(() => {});
-        tarea.finalizar();
-    }
-    return tarea.estado !== 'dudoso' || ocrConfirmado.checked;
-}
-
 // Validaciones de los datos declarados de la transferencia.
 function normalizarCuit(valor) { return String(valor).replace(/[\s-]/g, ""); }
 function validarCuit(valor) {
@@ -2448,12 +2453,7 @@ function limpiarFormulario() {
     restaurarMensajes();
 
 
-    btnSubmit.disabled =
-        false;
-
-
-    btnSubmit.innerText =
-        "Enviar Datos al Archivo";
+    liberarEnvio();
 
 }
 
@@ -2495,7 +2495,7 @@ form.addEventListener(
     async function(e) {
 
         e.preventDefault();
-        if (btnSubmit.disabled) return;
+        if (envioEnCurso || !ocrPermiteEnvio()) return;
 
 
         statusText.innerText =
@@ -2646,8 +2646,10 @@ form.addEventListener(
         // BLOQUEAR
         // ====================================================
 
-        btnSubmit.disabled =
-            true;
+        envioEnCurso = true;
+        comprobante.disabled = true;
+        ocrConfirmado.disabled = true;
+        btnSubmit.disabled = true;
 
 
         btnSubmit.innerText =
@@ -2659,16 +2661,6 @@ form.addEventListener(
 
 
         try {
-            btnSubmit.innerText = "Verificando imagen...";
-            if (!await verificarOCRAntesDeEnviar(archivo)) {
-                statusText.className = "error-general";
-                statusText.innerText = "Revisa el comprobante o confirma que la imagen es correcta antes de continuar.";
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "Enviar Datos al Archivo";
-                return;
-            }
-            btnSubmit.innerText = "Verificando datos...";
-
             // =================================================
             // VERIFICAR DNI / EMAIL
             // =================================================
@@ -2697,12 +2689,7 @@ form.addEventListener(
                 );
 
 
-                btnSubmit.disabled =
-                    false;
-
-
-                btnSubmit.innerText =
-                    "Enviar Datos al Archivo";
+                liberarEnvio();
 
 
                 return;
@@ -2727,12 +2714,7 @@ form.addEventListener(
                 );
 
 
-                btnSubmit.disabled =
-                    false;
-
-
-                btnSubmit.innerText =
-                    "Enviar Datos al Archivo";
+                liberarEnvio();
 
 
                 return;
@@ -2863,11 +2845,10 @@ form.addEventListener(
             );
 
 
-            if (comprobante.files[0] !== archivo) {
+            if (!ocrPermiteEnvio(archivo) || comprobante.files[0] !== archivo) {
                 statusText.className = "error-general";
                 statusText.innerText = "Cambiaste el comprobante durante el envío. Verifica la nueva imagen y vuelve a enviar.";
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "Enviar Datos al Archivo";
+                liberarEnvio();
                 return;
             }
             const solicitudId = crearSolicitudId();
@@ -2952,12 +2933,7 @@ form.addEventListener(
                 "No fue posible completar o confirmar la operación. Antes de volver a enviar, consultá con administración para evitar duplicaciones.";
 
 
-            btnSubmit.disabled =
-                false;
-
-
-            btnSubmit.innerText =
-                "Enviar Datos al Archivo";
+            liberarEnvio();
 
         }
 
